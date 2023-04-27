@@ -1,13 +1,13 @@
+//////////////////////////////////////////////////////////////////////////////////
 // File Name: Instruct.sv
 //
 // Name: Carson Holland
 //
-// Date: April 25th, 2023
+// Date: April 27th, 2023
 // 
-// File Purpose: holds the instructions that the processor will execute.
+// File Purpose: ROM that holds instructions to be executed
 // 
-// Assistance / Credit: Professor Mark W Welker's code
-// 
+// Assistance / Credit: Professor Mark Welker's Code
 //
 // the address lines are generic and each module must handle thier own decode. 
 // The address bus is large enough that each module can contain a local address decode. This will save on multiple enmables. 

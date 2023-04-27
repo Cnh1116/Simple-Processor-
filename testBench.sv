@@ -1,12 +1,14 @@
+//////////////////////////////////////////////////////////////////////////////////
 // File Name: testBench.sv
 //
 // Name: Carson Holland
 //
-// Date: April 25th, 2023
+// Date: April 27th, 2023
 // 
 // File Purpose: Generic Test bench It drives only clock and reset.
 // 
-// Assistance / Credit: Professor Mark W Welker's code
+// Assistance / Credit: Professor Mark Welker's Code
+
 
 module TestMatrix  (Clk,nReset);
 

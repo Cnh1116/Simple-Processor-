@@ -2,7 +2,7 @@
 //
 // Name: Carson Holland
 //
-// Date: April 25th, 2023
+// Date: April 27th, 2023
 // 
 // File Purpose: Accepts 2 operands and performs various Matrix related operations on them. Operations and their opcodes
 // are listed in the module below
@@ -17,8 +17,7 @@ input logic [255:0] ExeDataOut;
 
 output logic [255:0] MatrixDataOut; //Output
 
-
-logic [15:0] source_1_matrix [3:0][3:0]; //Internal
+logic [15:0] source_1_matrix [3:0][3:0];
 logic [15:0] source_2_matrix [3:0][3:0];
 logic [15:0] result_matrix [3:0][3:0];
 logic [7:0] operation;
@@ -31,7 +30,7 @@ parameter result = 2;
 parameter status_in = 3;
 parameter status_out = 4;
 
-assign operation = matrixALU_registers[status_in]; //Opcode variable
+assign operation = matrixALU_registers[status_in];
 
 parameter Mmult1 = 8'h00; //4x4 times 4x4
 parameter Mmult2 = 8'h01; //4x2 times 2x4
@@ -65,23 +64,53 @@ always_comb begin
             matrixALU_registers[status_out] = 256'h0; //IF I am writing new data, result is not accurate yet
             matrixALU_registers[address[11:0]] = ExeDataOut;
             if (address[11:0] == 0) begin //If writing to source 1, parse the word into the matrix
-                source_1_matrix[3] = '{ExeDataOut[255:240], ExeDataOut[239:224], ExeDataOut[223:208], ExeDataOut[207:192]};
-                source_1_matrix[2] = '{ExeDataOut[191:176], ExeDataOut[175:160], ExeDataOut[159:144], ExeDataOut[143:128]};
-                source_1_matrix[1] = '{ExeDataOut[127:112], ExeDataOut[111:96], ExeDataOut[95:80], ExeDataOut[79:64]};
-                source_1_matrix[0] = '{ExeDataOut[63:48], ExeDataOut[47:32], ExeDataOut[31:16], ExeDataOut[15:0]};
+                source_1_matrix[0][0] = ExeDataOut[15:0];
+                source_1_matrix[0][1] = ExeDataOut[31:16];
+                source_1_matrix[0][2] = ExeDataOut[47:32];
+                source_1_matrix[0][3] = ExeDataOut[63:48];
+                
+                source_1_matrix[1][0] = ExeDataOut[79:64];
+                source_1_matrix[1][1] = ExeDataOut[95:80];
+                source_1_matrix[1][2] = ExeDataOut[111:96];
+                source_1_matrix[1][3] = ExeDataOut[127:112];
+                
+                source_1_matrix[2][0] = ExeDataOut[143:128];
+                source_1_matrix[2][1] = ExeDataOut[159:144];
+                source_1_matrix[2][2] = ExeDataOut[175:160];
+                source_1_matrix[2][3] = ExeDataOut[191:176]; 
+                
+                source_1_matrix[3][0] = ExeDataOut[207:192];
+                source_1_matrix[3][1] = ExeDataOut[223:208];
+                source_1_matrix[3][2] = ExeDataOut[239:224];
+                source_1_matrix[3][3] = ExeDataOut[255:240];
                 end //Matrix 1 end
             if (address[11:0] == 1) begin //If writing to source 2, parse the word into the matrix
-                source_2_matrix[3] = '{ExeDataOut[255:240], ExeDataOut[239:224], ExeDataOut[223:208], ExeDataOut[207:192]};
-                source_2_matrix[2] = '{ExeDataOut[191:176], ExeDataOut[175:160], ExeDataOut[159:144], ExeDataOut[143:128]};
-                source_2_matrix[1] = '{ExeDataOut[127:112], ExeDataOut[111:96], ExeDataOut[95:80], ExeDataOut[79:64]};
-                source_2_matrix[0] = '{ExeDataOut[63:48], ExeDataOut[47:32], ExeDataOut[31:16], ExeDataOut[15:0]};
+                source_2_matrix[0][0] = ExeDataOut[15:0];
+                source_2_matrix[0][1] = ExeDataOut[31:16];
+                source_2_matrix[0][2] = ExeDataOut[47:32];
+                source_2_matrix[0][3] = ExeDataOut[63:48];
+                
+                source_2_matrix[1][0] = ExeDataOut[79:64];
+                source_2_matrix[1][1] = ExeDataOut[95:80];
+                source_2_matrix[1][2] = ExeDataOut[111:96];
+                source_2_matrix[1][3] = ExeDataOut[127:112];
+                
+                source_2_matrix[2][0] = ExeDataOut[143:128];
+                source_2_matrix[2][1] = ExeDataOut[159:144];
+                source_2_matrix[2][2] = ExeDataOut[175:160];
+                source_2_matrix[2][3] = ExeDataOut[191:176]; 
+                
+                source_2_matrix[3][0] = ExeDataOut[207:192];
+                source_2_matrix[3][1] = ExeDataOut[223:208];
+                source_2_matrix[3][2] = ExeDataOut[239:224];
+                source_2_matrix[3][3] = ExeDataOut[255:240];
                 end //Matrix 2 end
             end //if write is 0 end
         
         if (address[11:0] == 3) begin
         $display("I made it inside the Matrix ALU operation block");
         case(operation)
-            Mmult1: begin //4x4 times 4x4   Previously Implemented For loops, switched to simpler approach to enforce bit parsing was correct
+            Mmult1: begin //4x4 times 4x4
                     //for (integer i = 0; i < 4; i++) begin : rows
                       //  for (integer j = 0; j < 4; j++) begin : cols
                         //    result_matrix[i][j] = 0;
@@ -129,7 +158,7 @@ always_comb begin
                     matrixALU_registers[status_out] = 256'h1;
                     end //End Mmult1 case
             Mmult2: begin
-                    //Previously Implemented For loops, switched to simpler approach to enforce bit parsing was correct
+                    
                     //for (integer i = 0; i < 4; i++) begin : rows
                     //    for (integer j = 0; j < 4; j++) begin : cols
                     //        temp[i][j] = 0;
@@ -181,7 +210,7 @@ always_comb begin
                     matrixALU_registers[status_out] = 256'h1;
                     end 
             Mmult3: begin
-                    //Previously Implemented For loops, switched to simpler approach to enforce bit parsing was correct
+                    
                     //for (integer i = 0; i < 2; i++) begin : rows
                     //    for (integer j = 0; j < 2; j++) begin : cols
                     //        temp_m3[i][j] = 0;
@@ -212,7 +241,7 @@ always_comb begin
             Msub: begin
                    matrixALU_registers[result] = matrixALU_registers[source_1] - matrixALU_registers[source_2];
                    $display("~~~~~~~~~~~~~~~~~~~~~~~I'm inside the Msub block~~~~~~~~~~~~~~~~~~~~~~~");
-                   matrixALU_registers[status_out] = 256'h1; //Signal Data is ready
+                   matrixALU_registers[status_out] = 256'h1;
                    end 
             Mtranspose: begin
                     for(integer row = 0; row < 4; row++) begin
@@ -227,7 +256,7 @@ always_comb begin
                         
             
                     $display("~~~~~~~~~~~~~~~~~~~~~~~I'm inside the Mtranspose block~~~~~~~~~~~~~~~~~~~~~~~");
-                    matrixALU_registers[status_out] = 256'h1; //Signal Data is ready
+                    matrixALU_registers[status_out] = 256'h1;
                     end
             Mscale: begin
                    matrixALU_registers[result][15:0] = source_1_matrix[0][0] * matrixALU_registers[source_2];
@@ -250,7 +279,7 @@ always_comb begin
                    matrixALU_registers[result][239:224] = source_1_matrix[3][2] * matrixALU_registers[source_2];
                    matrixALU_registers[result][255:240] = source_1_matrix[3][3] * matrixALU_registers[source_2];
                     $display("~~~~~~~~~~~~~~~~~~~~~~~I'm inside the Mscale block~~~~~~~~~~~~~~~~~~~~~~~");
-                    matrixALU_registers[status_out] = 256'h1; //Signal Data is ready
+                    matrixALU_registers[status_out] = 256'h1;
                     end
             MscaleIMM: begin
                    matrixALU_registers[result][15:0] = source_1_matrix[0][0] * matrixALU_registers[source_2];
@@ -274,7 +303,7 @@ always_comb begin
                    matrixALU_registers[result][255:240] = source_1_matrix[3][3] * matrixALU_registers[source_2];
                        
                        $display("~~~~~~~~~~~~~~~~~~~~~~~I'm inside the MscaleIMM block~~~~~~~~~~~~~~~~~~~~~~~");    
-                       matrixALU_registers[status_out] = 256'h1; //Signal Data is ready
+                       matrixALU_registers[status_out] = 256'h1;
                        end
             
             default: $display("I have hit the DEFAULT OF THE INT ALU CASE BLOCK");

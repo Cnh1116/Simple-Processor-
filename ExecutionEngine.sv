@@ -2,12 +2,13 @@
 //
 // Name: Carson Holland
 //
-// Date: April 25th, 2023
+// Date: April 27th, 2023
 // 
 // File Purpose: Execution enigne to control data flow of a simple processor
 // 
 // Assistance / Credit: 
 
+//Top Nibble of Addressing to Modules
 parameter MainMemEn = 0;
 parameter InstrMemEn = 1;
 parameter MatrixAluEn = 2;
@@ -15,31 +16,31 @@ parameter IntAluEn = 3;
 parameter RegisterEn = 4;
 parameter ExecuteEn = 5;
 
-
 module Execution(Clk,InstructDataOut,MemDataOut,MatrixDataOut,IntDataOut,ExeDataOut, address, nRead,nWrite, nReset);
 
 input logic Clk, nReset; //Control Signals
 input logic [31:0] InstructDataOut; //Instruction Input
 input logic [255:0] MemDataOut, IntDataOut, MatrixDataOut;
 
-output logic [255:0] ExeDataOut;    //Output
+output logic [255:0] ExeDataOut; //Outputs
 output logic [15:0] address;
 output logic nRead, nWrite;
 
-logic [31:0] instruction;   //Internal Regs / logic
+//Internal Regs / logic
+logic [31:0] instruction;
 logic [7:0] opcode;
-logic [15:0] PC;
-
 logic [255:0] execution_registers[5];
-parameter source_1 = 0; //Execution Engine Regs
+logic [15:0] PC;
+parameter source_1 = 0;
 parameter source_2 = 1;
 parameter result = 2;
 parameter status_in = 3;
 parameter status_out = 4;
 
-logic [255:0] general_registers[5]; //General Purpose Regs
+logic [255:0] general_registers[5];
 
-enum {read_instruction,     //States Enumeration
+//States Enumeration
+enum {read_instruction, 
       read_instruction_data, 
       decode_instruction,
       find_source_1,
@@ -60,7 +61,8 @@ enum {read_instruction,     //States Enumeration
       move_result,
       result_finish} state, next_state;
 
-parameter stop = 8'hff; //Opcode Parameters
+//Opcode Parameters
+parameter stop = 8'hff;
 
 
 always_ff @ (negedge Clk or negedge nReset) begin
@@ -115,6 +117,7 @@ always_comb begin
                     execution_registers[source_1] = MemDataOut; //The upper nibble of the source1, main memory or reg
                 else
                     execution_registers[source_1] = general_registers[address[11:0]];
+                 //BAD DESIGN COULD BE REGS
                 next_state = find_dest_source_1;
             end //Integer get source 1 end
             

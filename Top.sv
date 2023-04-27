@@ -1,12 +1,17 @@
-// File Name: MainMem.sv
+//////////////////////////////////////////////////////////////////////////////////
+// File Name: Top.sv
 //
 // Name: Carson Holland
 //
-// Date: April 25th, 2023
+// Date: April 27th, 2023
 // 
-// File Purpose: The Top module connects all modules to one another.
+// File Purpose: Top module that connects all the modules
 // 
-// Assistance / Credit: Professor Mark W Welker's code
+// Assistance / Credit: Professor Mark Welker's Code
+//
+// Main memory MUST be allocated in the mainmemory module as per teh next line.
+//  logic [255:0]MainMemory[12]; // this is the physical memory
+//
 
 module top ();
 
@@ -17,6 +22,7 @@ logic [255:0] IntDataOut;
 logic [255:0] MatrixDataOut;
 logic nRead,nWrite,nReset,Clk;
 logic [15:0] address;
+
 logic Fail;
 
 InstructionMemory  U1(Clk,InstructDataOut, address, nRead,nReset);

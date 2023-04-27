@@ -1,12 +1,15 @@
+//////////////////////////////////////////////////////////////////////////////////
 // File Name: MainMem.sv
 //
 // Name: Carson Holland
 //
-// Date: April 25th, 2023
+// Date: April 27th, 2023
 // 
-// File Purpose: The Main Memory of the simple processor system. Holds 256 bit data.
+// File Purpose: Main memory modules holds 256 bit data
 // 
-// Assistance / Credit: Professor Mark W Welker's code
+// Assistance / Credit: Professor Mark Welker's Code
+
+
 
 module MainMemory(Clk,Dataout,DataIn, address, nRead,nWrite, nReset);
 
@@ -17,7 +20,7 @@ input logic [15:0] address;
 
 output logic [255:0] Dataout; // to the CPU 
 
-logic [255:0]MainMemory[14]; // this is the physical memory
+  logic [255:0]MainMemory[14]; // this is the physical memory
 
 always_ff @(negedge Clk or negedge nReset)
 begin
